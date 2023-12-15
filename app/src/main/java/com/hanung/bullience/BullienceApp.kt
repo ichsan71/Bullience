@@ -43,6 +43,8 @@ import com.hanung.bullience.ui.screen.home.HomeScreen
 import com.hanung.bullience.ui.screen.jelajah.JelajahScreen
 import com.hanung.bullience.ui.screen.lapor.LaporScreen
 import com.hanung.bullience.ui.screen.profile.ProfileScreen
+import com.hanung.bullience.ui.screen.register.RegisterScreen
+import com.hanung.bullience.ui.screen.signin.LoginScreen
 import com.hanung.bullience.ui.screen.splash.SplashScreen
 import com.hanung.bullience.ui.theme.BullienceTheme
 
@@ -59,7 +61,10 @@ fun BullienceApp(
 
     Scaffold(
         bottomBar = {
-            if (currentRoute != Screen.DetailLapor.route) {
+            if (currentRoute != Screen.DetailLapor.route
+                && currentRoute != Screen.SignInScreen.route
+                && currentRoute != Screen.Splash.route
+                && currentRoute != Screen.RegisterScreen.route) {
                 BottomBar(navController)
             }
         },
@@ -67,7 +72,7 @@ fun BullienceApp(
     ) {
         NavHost(
             navController = navController,
-            startDestination = Screen.Home.route,
+            startDestination = Screen.Splash.route,
             modifier = Modifier.padding(it)
         ) {
             composable(Screen.Home.route) {
@@ -94,6 +99,53 @@ fun BullienceApp(
             }
             composable(Screen.Profile.route) {
                 ProfileScreen()
+            }
+            composable(Screen.Splash.route) {
+                SplashScreen(navController = navController)
+            }
+            composable(Screen.RegisterScreen.route) {
+                RegisterScreen(
+                    navigateBack = {
+                        navController.navigateUp()
+                    },
+                    navigateToLogin = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.SignInScreen.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+
+                )
+            }
+            composable(Screen.SignInScreen.route) {
+                LoginScreen(
+                    navigateBack = {
+                        navController.navigateUp()
+                    },
+                    navigateToRegister = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.RegisterScreen.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    navigateToHome = {
+                        navController.navigate(Screen.Home.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                )
             }
         }
     }

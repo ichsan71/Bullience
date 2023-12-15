@@ -2,6 +2,7 @@ package com.hanung.bullience.ui.screen.register
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -45,7 +46,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun RegisterScreen() {
+fun RegisterScreen(
+    modifier: Modifier = Modifier,
+    navigateBack: () -> Unit = {},
+    navigateToLogin: () -> Unit,
+) {
+    RegisterContent(
+        modifier = modifier,
+        onBackClick = navigateBack,
+        onLoginCLick = navigateToLogin,
+        onRegisterClick = navigateToLogin
+    )
+}
+
+@Composable
+fun RegisterContent(
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit = {},
+    onLoginCLick: () -> Unit,
+    onRegisterClick: () -> Unit,
+){
     val context = LocalContext.current
     val name = remember {
         mutableStateOf(TextFieldValue())
@@ -65,7 +85,6 @@ fun RegisterScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(64.dp, 32.dp, 32.dp, 64.dp)
             .background(Color.White)
             .verticalScroll(scrollState),
         verticalArrangement = Arrangement.Center,
@@ -236,10 +255,7 @@ fun RegisterScreen() {
                             "Registered successfully",
                             Toast.LENGTH_SHORT
                         ).show()
-//                        navController.navigate("login_screen") {
-//                            popUpTo(navController.graph.startDestinationId)
-//                            launchSingleTop = true
-//                        }
+                        onRegisterClick()
                     }
                 }
             },
@@ -253,18 +269,18 @@ fun RegisterScreen() {
         )
         Spacer(Modifier.size(16.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            TextButton(onClick = {
-//                navController.navigate("login_screen") {
-//                    popUpTo(navController.graph.startDestinationId)
-//                    launchSingleTop = true
-//                }
-            }) {
-                Text(
-                    text = "Sudah punya akun? ",
-                    color = Color.Black
-                )
-                Text(text = "Login", color = Color.Blue)
-            }
+            Text(
+                text = "Sudah punya akun? ",
+                color = Color.Black
+            )
+            Text(
+                modifier = Modifier
+                    .clickable {
+                        onLoginCLick()
+                    },
+                text = "Login",
+                color = Color.Blue)
+
         }
     }
 }
@@ -272,5 +288,8 @@ fun RegisterScreen() {
 @Preview
 @Composable
 fun RegisterScreenPreview() {
-    RegisterScreen()
+    RegisterScreen(
+        navigateBack = {},
+        navigateToLogin = {},
+    )
 }

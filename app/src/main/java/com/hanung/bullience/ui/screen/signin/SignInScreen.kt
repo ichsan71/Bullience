@@ -61,9 +61,31 @@ import androidx.constraintlayout.compose.Visibility
 import androidx.navigation.NavController
 
 
+
+@Composable
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    navigateBack: () -> Unit,
+    navigateToRegister: () -> Unit,
+    navigateToHome: () -> Unit
+) {
+    LoginContent(
+        modifier = modifier,
+        onBackClick = navigateBack,
+        onNavigateRegister = navigateToRegister,
+        onNavigateHome = navigateToHome
+    )
+
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen() {
+fun LoginContent(
+    modifier: Modifier,
+    onBackClick: () -> Unit,
+    onNavigateRegister: () -> Unit,
+    onNavigateHome: () -> Unit
+) {
     val context = LocalContext.current
     val email = remember { mutableStateOf(TextFieldValue()) }
     val emailErrorState = remember { mutableStateOf(false) }
@@ -73,11 +95,10 @@ fun LoginScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(64.dp, 32.dp, 32.dp, 64.dp)
             .background(Color.White),
         verticalArrangement = Arrangement.Top,
 
-    ) {
+        ) {
         Text(
             text = "Log In",
             style = MaterialTheme.typography.h1,
@@ -88,7 +109,7 @@ fun LoginScreen() {
                 .align(Alignment.CenterHorizontally),
             textAlign = TextAlign.Center,
             fontSize = 30.sp,
-            )
+        )
         Text(
             text = "Senang melihatmu kembali",
             fontSize = 14.sp,
@@ -167,6 +188,7 @@ fun LoginScreen() {
                             "Logged in successfully",
                             Toast.LENGTH_SHORT
                         ).show()
+                        onNavigateHome()
                     }
                 }
             },
@@ -180,23 +202,28 @@ fun LoginScreen() {
         )
         Spacer(Modifier.size(16.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            TextButton(onClick = {
+            Text(
+                text = "Belum punya akun? ",
+                color = Color.Black)
 
-            }) {
-                Text(
-                    text = "Belum punya akun? ",
-                    color = Color.Black)
-
-                Text(
-                    text = " Daftar Akun",
-                    color = Color.Blue,
-                )
-            }
+            Text(
+                modifier = Modifier
+                    .clickable {
+                        onNavigateRegister()
+                    },
+                text = " Daftar Akun",
+                color = Color.Blue,
+            )
         }
     }
 }
+
 @Preview
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen()
+    LoginScreen(
+        navigateBack = {},
+        navigateToRegister = {},
+        navigateToHome = {}
+    )
 }

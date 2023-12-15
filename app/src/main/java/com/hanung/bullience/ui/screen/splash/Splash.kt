@@ -43,7 +43,7 @@ fun SplashScreen(navController: NavController) {
                 )
             )
             delay(2000L)
-            navController.navigate("main_screen")
+            navController.navigate("SignInScreen")
         }
         Box(
             contentAlignment = Alignment.Center,
