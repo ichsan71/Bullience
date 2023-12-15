@@ -71,7 +71,20 @@ fun BullienceApp(
             modifier = Modifier.padding(it)
         ) {
             composable(Screen.Home.route) {
-                HomeScreen()
+                HomeScreen(
+                    navigateBack = {
+                        navController.navigateUp()
+                    },
+                    navigateToLapor = {
+                        navController.navigate(Screen.Lapor.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                )
             }
             composable(Screen.Jelajah.route) {
                 JelajahScreen()
